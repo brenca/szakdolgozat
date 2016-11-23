@@ -1,0 +1,2 @@
+<letters> ::= "a" | "s" | "d"
+<opt-whitespace> ::= " " <opt-whitespace> | ""

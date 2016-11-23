@@ -1,0 +1,14 @@
+{
+  "name": "mjsi",
+  "version": "0.0.1",
+  "description": "Modular JavaScript cross interpreter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Heilig Benedek",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "fs-extra": "^1.0.0"
+  }
+}
