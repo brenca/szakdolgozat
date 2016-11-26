@@ -1,5 +1,29 @@
 const fs = require('fs-extra')
 const EventEmitter = require('events')
+const util = require('util')
+
+class Node {
+  constructor(rule) {
+    this.rule = rule
+    this.children = []
+  }
+  
+  toString() {
+    if (typeof this.rule === 'string' || this.rule instanceof String) {
+      return this.rule
+    } else {
+      return this.rule.toString()
+    }
+  }
+  
+  addChild(child) {
+    this.children.push(child)
+  }
+  
+  addChildren(children) {
+    this.children = this.children.concat(children)
+  }
+}
 
 class Rule {
   constructor(name, subrules) {
@@ -7,33 +31,44 @@ class Rule {
     this.subrules = subrules
   }
   
+  toString() {
+    return this.name
+  }
+  
   match(str) {
-    let tryReduce = (subrules) => {
-      let s = str.slice(0)
-      
+    let tryReduce = (subrules, str) => {
+      let rules = []
       subrules.some(subrule => {
-        let match = subrule.match(s)
-        if (match === false) {
+        let match = subrule.match(str)
+        if (match.return === false) {
+          rules = []
+          str = false
           return true
         } else {
-          s = match
+          let node = new Node(subrule)
+          node.addChildren(match.rules)
+          rules.push(node)
+          str = match.return
         }
       })
       
-      return s
+      return {
+        rules: rules,
+        return: str
+      }
     }
     
     let matches = []
     this.subrules.forEach(subrules => {
-      matches.push(tryReduce(subrules))
+      matches.push(tryReduce(subrules, str.slice(0)))
     })
-    matches = matches.filter(m => { return m !== false })
+    matches = matches.filter(m => { return m.return !== false })
     
-    if (matches.length === 0) return false
+    if (matches.length === 0) return { rules: [], return: false }
     else return matches.reduce((l, c) => {
-        return l.length > c.length ? c:l
+        return l.return.length > c.return.length ? c:l
       },
-      { length: Infinity }
+      { return: { length: Infinity } }
     )
   }
 }
@@ -43,13 +78,20 @@ class Terminal {
     this.value = value
   }
   
+  toString() {
+    return 'Terminal "' + this.value + '"'
+  }
+  
   match(str) {
-    let regexp = new RegExp('^' + this.value)
-    let match = str.match(new RegExp('(^' + this.value + ')(.*)$'))
+    let escape = (s) => {
+      return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
+    
+    let match = str.match(new RegExp('(^' + escape(this.value) + ')(.*)$'))
     if (match) {
-      return match[2]
+      return { rules: [], return: match[2] }
     } else {
-      return false
+      return { rules: [], return: false }
     }
   }
 }
@@ -58,18 +100,18 @@ class RuleSet {
   constructor(raw) {
     let set = this
     let separate = (text) => {
-      let starters = '<"', enders = '>"', rules = [[]], last = -1
+      let starters = '<"\'', enders = '>"\'', rules = [[]], last = -1
       
       text.split('').forEach((v, i) => {
         if (v == '|' && last < 0) rules.push([])
         else if (starters.indexOf(v) >= 0 && last < 0) last = i
-        else if (enders.indexOf(v) >= 0 && last >= 0) {
+        else if (enders.indexOf(v) >= 0 && last >= 0 && starters.indexOf(text[last]) === enders.indexOf(v)) {
           let segment
           switch (text[last]) {
             case '<':
               segment = text.substring(last + 1, i)
               break
-            case '"':
+            case '"': case '\'':
               segment = new Terminal(text.substring(last + 1, i))
               break
           }
@@ -116,15 +158,20 @@ class RuleSet {
     })
   }
   
-  parse(str) {
+  buildAST(str) {
     let step = (str) => {
       let matches = []
       this.rules.forEach(rule => {
+        console.log(rule.name);
+        let match = rule.match(str.slice(0))
+        console.log(match);
         matches.push({
           rule: rule,
-          return: rule.match(str.slice(0))
+          rules: match.rules,
+          return: match.return
         })
       })
+      console.log(matches);
       matches = matches.map(m => {
         m.val = str.replace(m.return, '')
         return m
@@ -139,14 +186,22 @@ class RuleSet {
     }
     
     let rest = str.slice(0)
+    let rules = []
     while (rest.length > 0) {
+      console.log(rest);
       let m = step(rest)
+      console.log(m);
       if (m.return === rest) return false
       
+      let node = new Node(m.rule)
+      node.addChildren(m.rules)
+      rules.push(node)
       rest = m.return
     }
     
-    return rest
+    let node = new Node("start")
+    node.addChildren(rules)
+    return node
   }
 }
 
@@ -159,10 +214,35 @@ let readFile = (file) => {
   })
 }
 
+let prettyPrint = (ast, offset = 0) => {
+  let padding = (new Array(offset * 2 + 1)).join(' ')
+  console.log(padding + ast.toString())
+  ast.children.forEach(e => {
+    prettyPrint(e, offset + 1)
+  })
+}
+
+let verify = (ast) => {
+  let str = (ast.rule instanceof Terminal) ? ast.rule.value : ""
+  
+  ast.children.forEach(e => {
+    str += verify(e)
+  })
+  
+  return str
+}
+
 readFile('./definition.bnf').then(raw => {
   let set = new RuleSet(raw)
-  // console.log(set.rules[0].subrules);
-  // console.log(set.rules[0].match('   asd asd'));
-  
-  console.log(set.parse('   asd asd adsdadsdasdasdadsdasda'));
+  // console.log(set);
+  // console.log(util.inspect(set.rules[7], false, null))
+  let code = `fasd-sasd   asd asd asd \\ ^ $ * + ? . ( ) | { } [ ]`
+  let ast = set.buildAST(code)
+  // console.log(ast);
+  if (ast) {
+    prettyPrint(ast)
+    console.log(code === verify(ast))
+  } else {
+    console.log('didn`t match')
+  }
 })
