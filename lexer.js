@@ -5,6 +5,9 @@ class Lexer {
     this._state = Lexer.DefaultState
     this._stateful = false
     this.skipWhitespace = true
+    
+    this.addTokenClass(new Lexer.TokenClass('EOF', null))
+    this.addTokenClass(new Lexer.TokenClass('EOL', /[\r\n]+/))
   }
   
   get stateful() {
@@ -279,12 +282,20 @@ Lexer.TokenClass = class {
   constructor(name, regexp, state = Lexer.DefaultState) {
     if (regexp instanceof RegExp)
       this.regexp = new RegExp('^' + regexp.source, regexp.flags)
-    else throw TypeError('"' + regexp + '" is not a RegExp')
+    else if (regexp === null) 
+      this.regexp = regexp
+    else
+      throw TypeError('"' + regexp + '" is not a RegExp')
     this.name = name
     this.state = state
   }
   
   match(str) {
+    if (this.regexp === null) return {
+      consumed: false,
+      rest: str
+    }
+    
     let m = this.regexp.exec(str)
     if (m === null) {
       return {

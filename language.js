@@ -20,6 +20,7 @@ class Language {
     if (!tokenized.success) throw Error('could not tokenize code')
     
     let parsed = this._parser.parse(tokenized.tokens)
+    // console.log(parsed)
   }
 }
 

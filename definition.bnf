@@ -1,3 +1,5 @@
-<N> ::= <V> "=" <E> | <E>
-<E> ::= <V>
-<V> ::= "x" | "*" <E>
+<function> ::= <Token-function> <opening-bracket> <parameters> <closing-bracket>
+<opening-bracket> ::= "("
+<closing-bracket> ::= ")"
+<parameters> ::= <parameter> | <parameter> "," <parameters> | ""
+<parameter> ::= <Token-identifier> | <Token-int> | <Token-float>

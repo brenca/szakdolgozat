@@ -7,23 +7,26 @@ const Parser = Language.Parser
 const language = new Language()
 
 language.lexer.addTokenClasses([
-  new Lexer.TokenClass('letter', /[a-z]/i),
-  new Lexer.TokenClass('digit', /[0-9]/),
-  new Lexer.TokenClass('symbol', 
-    /[\|\ \-\!\#\$\%\&\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~]/),
-  new Lexer.TokenClass('whitespace', /\s+/),
+  new Lexer.TokenClass('function', /function/),
+  new Lexer.TokenClass('int', /[0-9]+(?!\.)/),
+  new Lexer.TokenClass('float', /[0-9]+\.[0-9]+/),
+  new Lexer.TokenClass('identifier', /[a-z]+[a-z0-9]*/i),
   new Lexer.TokenClass('character', /./)
 ])
 
 let bnf = fs.readFileSync('./definition.bnf', 'utf8')
 language.parser.fromBNF(bnf)
+language.execute('function (  asdasd, asd, 354, as42342s)')
+// language.execute('<asd> ::= "asd" | "dsd"')
 
-language.parser.findItemSets()
-language.parser.printItemSets()
-language.parser.findExtendedGrammar()
-language.parser.printExtendedGrammarRules()
+// language.parser.printActionGotos()
+// language.parser.printItemSets()
+// language.parser.printExtendedGrammarRules()
+// language.parser.printExtendedGrammarItems()
 
-// console.log(language.parser._rules);
+// language.parser._rules.forEach(rule => {
+//   console.log(rule.name, rule._firsts)
+// })
 
 // console.log(language.lexer.tokenize(bnf).tokens)
 
