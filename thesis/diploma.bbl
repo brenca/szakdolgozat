@@ -1,0 +1,60 @@
+\begin{thebibliography}{10}
+
+\bibitem{Antlr}
+Another tool for language recognition.
+\newblock \url{http://www.antlr.org/}.
+
+\bibitem{Bison}
+Gnu bison.
+\newblock \url{https://www.gnu.org/software/bison/}.
+
+\bibitem{Candy86}
+James~C. Candy.
+\newblock Decimation for sigma delta modulation.
+\newblock {\em {IEEE} Trans.\ on Communications}, 34(1):72--76, January 1986.
+
+\bibitem{Jison}
+Jison - your friendly javascript parser generator!
+\newblock \url{http://zaa.ch/jison/}.
+
+\bibitem{KissPhD}
+Peter Kiss.
+\newblock {\em Adaptive Digital Compensation of Analog Circuit Imperfections
+  for Cascaded Delta-Sigma Analog-to-Digital Converters}.
+\newblock PhD thesis, Technical University of Timi\c{s}oara, Romania, April
+  2000.
+
+\bibitem{Lee87}
+Wai~L. Lee and Charles~G. Sodini.
+\newblock A topology for higher order interpolative coders.
+\newblock In {\em Proc.\ of the IEEE International Symposium on Circuits and
+  Systems}, pages 459--462, Philadelphia, PA, USA, May~4--7 1987.
+
+\bibitem{DipPortal}
+Budapesti {M}ûszaki és {G}azdaságtudományi {E}gyetem {V}illamosmérnöki
+  és~{I}nformatikai {K}ar.
+\newblock {D}iplomaterv portál (2011 február 26.).
+\newblock \url{http://diplomaterv.vik.bme.hu/}.
+
+\bibitem{Schreier00}
+Richard Schreier.
+\newblock {\em The Delta-Sigma Toolbox v5.2}.
+\newblock Oregon State University, January 2000.
+\newblock URL: http://www.mathworks.com/matlabcentral/fileexchange/.
+
+\bibitem{Syntax}
+Dmitry Soshnikov.
+\newblock Syntax - language agnostic parser generator.
+\newblock
+  \url{https://medium.com/@DmitrySoshnikov/syntax-language-agnostic-parser-generator-bd24468d7cfc}.
+
+\bibitem{Wettl04}
+Ferenc Wettl, Gyula Mayer, and Péter Szabó.
+\newblock {\em \LaTeX~kézikönyv}.
+\newblock Panem Könyvkiadó, 2004.
+
+\bibitem{Yacc}
+Yet another compiler-compiler.
+\newblock \url{http://dinosaur.compilertools.net/}.
+
+\end{thebibliography}
