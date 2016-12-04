@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Teszt</title>
+    <script type="text/javascript">
+      var body = ''
+      window.console.log = function(message) {
+        if (document.querySelector('body'))
+          document.querySelector('body').innerHTML = message
+        else 
+          body = message
+      }
+      window.addEventListener('load', function() {
+        console.log(body)
+      })
+    </script>
+    <script src="./bundle.js"></script>
+  </head>
+  <body>
+  </body>
+</html>
