@@ -1,4 +1,4 @@
-const Language = require('../../lib/language')
+const Language = require('../lib/language')
 const { Lexer, Parser } = Language
 
 class BasicMath extends Language {
@@ -6,7 +6,7 @@ class BasicMath extends Language {
     super()
     
     this.lexer.addTokenClasses([
-      new Lexer.TokenClass('int', /[0-9]+(?!\.)/),
+      new Lexer.TokenClass('int', /[0-9]+(?![0-9]*\.)/),
       new Lexer.TokenClass('float', /[0-9]+\.[0-9]+/),
       new Lexer.TokenClass('char', /\S/)
     ])
@@ -23,24 +23,24 @@ class BasicMath extends Language {
   }
   
   executeOne(node) {    
-    if (node._rule.class !== undefined) {
-      switch (node._rule.class.name) {
+    if (node.rule.class !== undefined) {
+      switch (node.rule.class.name) {
         case 'int':
-          return parseInt(node._rule.value)
+          return parseInt(node.rule.value)
           break;
         case 'float':
-          return parseFloat(node._rule.value)
+          return parseFloat(node.rule.value)
           break;
         default:
-          return node._rule.value
+          return node.rule.value
       }
     }
     
-    let parameters = node._children.map(child => {
+    let parameters = node.children.map(child => {
       return this.executeOne(child)
     })
     
-    switch (node._rule.name) {
+    switch (node.rule.name) {
       case 'E': case 'T': case 'H':
         switch (parameters[1]) {
           case '-':
@@ -68,6 +68,7 @@ class BasicMath extends Language {
       case 'S':
         return parameters[0] + ', ' + parameters[2]
       default:
+      console.log(node.rule);
         throw Error('Unknown rule')
     }
   }
