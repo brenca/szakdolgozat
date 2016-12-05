@@ -1,21 +1,61 @@
 %----------------------------------------------------------------------------
-\chapter{A dolgozat formai kivitele}
+\chapter{Lexical analysis}\label{sect:Lexing}
 %----------------------------------------------------------------------------
-Az itt található információk egy része a BME VIK Hallgatói Képviselet által készített ,,Utolsó félév a villanykaron'' c. munkából lett kis változtatásokkal átemelve. Az eredeti dokumentum az alábbi linken érhetõ el: \url{http://vik-hk.bme.hu/diplomafelev-howto-2009}.
+Lexical analysis the the process in which an input string is turned into tokens. This is done to make the next step - parsing - easier. For example, the parser can deal with words instead of having to try to match the grammar's rules character-by-character. This can greatly reduce the complexity of the grammar, which means it makes it easier to write a grammar for a specific language.
+%----------------------------------------------------------------------------
+\section{Using regular expressions}
+%----------------------------------------------------------------------------
+Regular expressions are a common tool used in lexical analysis \cite{Lex}, since during the analysis, we need to determine what class of tokens does the beginning of the given source code translates to - and regular expressions provide a simple way to write patterns that we can match against our source.
 
-%----------------------------------------------------------------------------
-\section{A dolgozat kimérete}
-%----------------------------------------------------------------------------
-A minimális 50, az optimális kiméret 60-70 oldal (függelékkel együtt). A bírálók és a záróvizsga bizottság sem szereti kifejezetten a túl hosszú dolgozatokat, így a bruttó 90 oldalt már nem érdemes túlszárnyalni. Egyébként függetlenül a dolgozat kiméretétõl, ha a dolgozat nem érdekfeszítõ, akkor az olvasó már az elején a végét fogja várni. Érdemes zárt, önmagában is érthetõ mûvet alkotni.
+Regular expressions is a well established way of pattern matching, since the concept was created in the 1950s by Stephen Cole Kleene. A regular expression is a string of characters that describe a pattern, which then can be matched against a string to do operations like finding the first matching position, finding all matching positions, replacing said matches with other strings, etc. The language of regular expressions have numerous rules which allows us to create very complicated patterns. The regular expression parser engine in JavaScript is well documented \footnote{JavaScript RegExp reference \url{https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions}}, but I will provide some examples:
+\begin{itemize}
+\item \texttt{/[0-9]+\textbackslash.[0-9]+/} match floating point numbers (a dot indicates the decimal point)
+\item \texttt{/[a-z]+[a-z0-9]*/i} match an identifier, a name that must start with a character, has to be at least 1 character long and otherwise can contain alphanumeric characters (lower and upper case too)
+\item \texttt{/[0-9]+(?!\textbackslash.)/} match an integer (a sequence of numbers that is not followed by a dot)
+\end{itemize}
 
-%----------------------------------------------------------------------------
-\section{A dolgozat nyelve}
-%----------------------------------------------------------------------------
-Mivel Magyarországon a hivatalos nyelv a magyar, ezért alapértelmezésben magyarul kell megírni a dolgozatot. Aki külföldi posztgraduális képzésben akar részt venni, nemzetközi szintû tudományos kutatást szeretne végezni, vagy multinacionális cégnél akar elhelyezkedni, annak célszerû angolul megírnia diplomadolgozatát. Mielõtt a hallgató az angol nyelvû verzió mellett dönt, erõsen ajánlott mérlegelni, hogy ez mennyi többletmunkát fog a hallgatónak jelenteni fogalmazás és nyelvhelyesség terén, valamint - nem utolsó sorban - hogy ez mennyi többletmunkát fog jelenteni a konzulens illetve bíráló számára. Egy nehezen olvasható, netalán érthetetlen szöveg teher minden játékos számára.
+The first pattern makes use of ranges. Instead of having to write out all the numbers, we can just say \texttt{[0-9]}, which will match any number. Anything in a pair of square brackets is a group of possible characters in that position, for example \texttt{[abc]} would only match a, b or c. The \texttt{+} sign is a quantifier, expressing that at least one character from the group before it must be present. We can see another quantifier in the second rule, the \texttt{*} means zero or more matches of the group it is attached to. In the first and the last group, we can observe a \texttt{\textbackslash}. combination. This is required because . has a special meaning in regular expressions (it matches any character), so if we want to only match a dot, we need to escape it, which is done by adding a \texttt{\textbackslash} before it. In the second rule, we can see a modifier at the end of the expression. That modifier \texttt{i} means that the matching should be done in a case-insensitive way (the default mode is case-sensitive). In the last rule, we can see one of the more complicated kinds of expressions - at the end of the expression, there is a pattern \texttt{(?!\textbackslash.)}, which is a negative lookahead pattern. This means that the whole expression will only match if the inside of this pattern (a dot in this case) can not be matched after the examined string. The negative lookahead won't be included in the result. Several other tools are available in regular expressions to write complicated patterns (such as positive lookahead, capture groups matching exactly n times, etc.), which can make lexical analysis easier, since the regular expression parser engine is doing some of the work for us.
 
+Because of the expressiveness of regular expressions, my implementation of the lexical analyser will be fairly simple, without the need of explicitly working with lookahead rules when transitioning between states, since those can be handled by carefully writing the regular expressions for the tokens.
 %----------------------------------------------------------------------------
-\section{A dokumentum nyomdatechnikai kivitele}
+\section{The Lexer module}
 %----------------------------------------------------------------------------
-A dolgozatot A4-es fehér lapra nyomtatva, 2,5 centiméteres margóval (+1~cm kötésbeni), 11-12 pontos betûmérettel, talpas betûtípussal és másfeles sorközzel célszerû elkészíteni.
+The lexical analyser module is named Lexer - which is in turn a JavaScript class with several subclasses. Lexer implements a regular expression based matching system with an additional ability to specify states, and transitions between these states. This is however optional, and Lexer can work without keeping track of states.
 
+\subsection{Lexer subclasses}
+\subsubsection{Lexer.Token}
+The Token class represents a token - it has a value, which is the parsed string that belongs to the token, and a class, which is a reference to the TokenClass the token belongs to.
+\subsubsection{Lexer.TokenClass}
+The TokenClass represents a class of tokens - it has a name, an associated regular expression, and a state, which defaults to the DefaultState. It also has a match method that tries to match against a given string, and returns the consumed part of the string alongside with the remaining part. If the regular expression can not be successfully matched against the string, the consumed part will have a value of false, indicating no successful match.
+A special subclass is always added to the list of classes, which is the EOLTokenClass - it matches the end-of-line characters.
+Another special subclass is the StatelessTokenClass, which associates the AnyState with itself, which means it will match in any non-strict state.
+\subsubsection{Lexer.TokenClassGroup}
+The TokenClassGroup is a container for TokenClasses. It can be used to define transitions if any of the classes in it matched. It has an interface that consists of a push and pop method, a mapping function to transform all elements and a find function that checks if a TokenClass is part of the group or not.
+\subsubsection{Lexer.State}
+The State class represents a state in stateful mode - it has a name, and a strict parameter, which is false by default.
+Two special subclasses exist, one is the AnyState, which is used for tokens that shall match in any state that is non-strict, and other is the DefaultState, which is the one the state machine starts in, and which all classes belong to if no state parameter is given to them.
+\subsubsection{Lexer.StateTransitionBase}
+This class is the common core of the state transition classes - it has a from and to member, which represent the states to transition from and to, and it also has a member that takes the Lexer, and checks and retrieves the states for the two members (initially, the to and from members contain the name of the states only).
+\subsubsection{Lexer.StateTransition}
+The StateTransition class is the traditional state transition, which has a token class member alongside the inherited to and from. The instances can be created with two or three parameters - in the case of two parameters, the from state will be derived from the state associated with the token class, while if the class and the two states are provided, the from state will be explicitly set. This allows state transitions based on stateless token classes.
+\subsubsection{Lexer.GroupStateTransition} 
+The GroupStateTransition is similar to the StateTransition class, but it defines a transition that happens when any of the group's token classes match in a certain state. The three parameters are the TokenClassGroup, the from and the to states.
+\subsection{Stateless mode}
+In stateless mode, Lexer only uses the default state, and does not transition into any other state - and thus the token classes do not need to be initialised with data about which state they belong to.
+\subsection{Stateful mode}
+In stateful mode, Lexer takes advantage of the rules defined by the States, StateTransitions and GroupStateTransitions given by the user. Lexer keeps track of the current state, and prioritizes group based transitions when deciding what state to transition to.
+\subsection{Skipping whitespaces}
+To make the lexical analysis easier, Lexer can be told to ignore whitespace characters. This is a very useful option, and thus the default value is true - but some languages require us to keep track of the indentation (e.g. Python), in which case the rules have to deal with the whitespace characters.
+\subsection{The Lexer class}
+The Lexer class is the core of this module. It provides facilities to add states, transitions, token classes, and has a member that runs the analysis on the given string. This member is called tokenize, and it follows an iterative algorithm - it looks for the first rule that matches the beginning of the string, creates a token based on that rule, does the necessary state transitions and starts the process all over again. The return value is an dictionary with three values:
+\begin{itemize}
+\item success - indicates whether the whole string was consumed or not
+\item tokens - the list of tokens the process generated
+\item rest - the rest of the string that was not parsed, if any
+\end{itemize}
+%----------------------------------------------------------------------------
+\section{Possible enhancements}
+%----------------------------------------------------------------------------
+In the current state, the Lexer module is easily usable - however, the user needs to define first the states, then the token classes and groups and finally the transitions. This is a quite verbose way of defining the rules for the analysis - which could be done by using a custom data format that describes the rules. This data could be read from a file and preprocessed, which could make the process of defining the rules more robust. It could also be a more compact way of describing the rules.
 
+Currently, the Lexer module can not transform the value of the tokens it creates. This could also make parsing easier, since e.g. integers and floats could be transformed into their numerical values during this stage, rather than having to deal with this process during the traversal of the AST.

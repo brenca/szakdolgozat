@@ -1,26 +1,29 @@
-language.lexer.stateful = true
+const Lexer = require('./lib/lexer')
+let lex = new Lexer()
 
-language.lexer.addStates([
+lex.stateful = true
+
+lex.addStates([
   new Lexer.State('parameterSeparator', true),
   new Lexer.State('parameter')
 ])
 
-language.lexer.addTokenClasses([
+lex.addTokenClasses([
   new Lexer.TokenClass('function', /function/),
   new Lexer.TokenClass('openingBracket', /\(/, 'function'),
   new Lexer.TokenClass('separator', /,/, 'parameterSeparator'),
   new Lexer.TokenClass('closingBracket', /\)/, 'parameterSeparator'),
   new Lexer.StatelessTokenClass('whitespace', /\s+/),
-  new Lexer.StatelessTokenClass('int', /[0-9](?!\.)+/),
+  new Lexer.StatelessTokenClass('int', /[0-9]+(?!\.)/),
   new Lexer.StatelessTokenClass('float', /[0-9]+\.[0-9]+/),
   new Lexer.StatelessTokenClass('identifier', /[a-z]+[a-z0-9]*/i),
 ])
 
-language.lexer.addTokenClassGroups([
+lex.addTokenClassGroups([
   new Lexer.TokenClassGroup('parameters', ['int', 'float', 'identifier'])
 ])
 
-language.lexer.addStateTransitions([
+lex.addStateTransitions([
   new Lexer.StateTransition('function', 'function'),
   new Lexer.StateTransition('openingBracket', 'parameter'),
   new Lexer.GroupStateTransition(
@@ -29,3 +32,5 @@ language.lexer.addStateTransitions([
   new Lexer.StateTransition('separator', 'parameter'),
   new Lexer.StateTransition('closingBracket', Lexer.DefaultState)
 ])
+
+console.log(lex.tokenize('10 3.14'))

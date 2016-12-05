@@ -2,23 +2,30 @@
 \contentsline {chapter}{Kivonat}{4}{chapter*.2}
 \contentsline {chapter}{Abstract}{5}{chapter*.3}
 \contentsline {chapter}{Introduction}{6}{chapter*.4}
-\contentsline {chapter}{\numberline {1}Lexical analysis}{9}{chapter.1}
-\contentsline {section}{\numberline {1.1}First point}{9}{section.1.1}
-\contentsline {chapter}{\numberline {2}A dolgozat formai kivitele}{10}{chapter.2}
-\contentsline {section}{\numberline {2.1}A dolgozat kim\'erete}{10}{section.2.1}
-\contentsline {section}{\numberline {2.2}A dolgozat nyelve}{10}{section.2.2}
-\contentsline {section}{\numberline {2.3}A dokumentum nyomdatechnikai kivitele}{10}{section.2.3}
-\contentsline {chapter}{\numberline {3}A \LaTeX -sablon haszn\'alata}{11}{chapter.3}
-\contentsline {section}{\numberline {3.1}C\IeC {\'\i }mk\'ek \'es hivatkoz\'asok}{11}{section.3.1}
-\contentsline {section}{\numberline {3.2}\'Abr\'ak \'es t\'abl\'azatok}{12}{section.3.2}
-\contentsline {section}{\numberline {3.3}Felsorol\'asok \'es list\'ak}{14}{section.3.3}
-\contentsline {section}{\numberline {3.4}K\'epletek}{14}{section.3.4}
-\contentsline {section}{\numberline {3.5}Irodalmi hivatkoz\'asok}{16}{section.3.5}
-\contentsline {section}{\numberline {3.6}A dolgozat szerkezete \'es a forr\'asf\'ajlok}{19}{section.3.6}
-\contentsline {section}{\numberline {3.7}Alapadatok megad\'asa}{20}{section.3.7}
-\contentsline {section}{\numberline {3.8}\'Uj fejezet \IeC {\'\i }r\'asa}{20}{section.3.8}
-\contentsline {chapter}{K\"osz\"onetnyilv\'an\IeC {\'\i }t\'as}{21}{chapter*.13}
-\contentsline {chapter}{Bibliography}{22}{chapter*.14}
-\contentsline {chapter}{F\"uggel\'ek}{23}{appendix*.15}
-\contentsline {section}{\numberline {F.1}A TeXnicCenter fel\"ulete}{23}{section.F.1}
-\contentsline {section}{\numberline {F.2}V\'alasz az ,,\'Elet, a vil\'agmindens\'eg, meg minden'' k\'erd\'es\'ere}{24}{section.F.2}
+\contentsline {chapter}{\numberline {1}Coding conventions}{9}{chapter.1}
+\contentsline {section}{\numberline {1.1}Problems with ECMAScript 6 classes}{9}{section.1.1}
+\contentsline {section}{\numberline {1.2}Node.js modules}{10}{section.1.2}
+\contentsline {chapter}{\numberline {2}Lexical analysis}{11}{chapter.2}
+\contentsline {section}{\numberline {2.1}Using regular expressions}{11}{section.2.1}
+\contentsline {section}{\numberline {2.2}The Lexer module}{12}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Lexer subclasses}{12}{subsection.2.2.1}
+\contentsline {subsubsection}{Lexer.Token}{12}{section*.6}
+\contentsline {subsubsection}{Lexer.TokenClass}{12}{section*.7}
+\contentsline {subsubsection}{Lexer.TokenClassGroup}{13}{section*.8}
+\contentsline {subsubsection}{Lexer.State}{13}{section*.9}
+\contentsline {subsubsection}{Lexer.StateTransitionBase}{13}{section*.10}
+\contentsline {subsubsection}{Lexer.StateTransition}{13}{section*.11}
+\contentsline {subsubsection}{Lexer.GroupStateTransition}{14}{section*.12}
+\contentsline {subsection}{\numberline {2.2.2}Stateless mode}{14}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Stateful mode}{14}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Skipping whitespaces}{14}{subsection.2.2.4}
+\contentsline {subsection}{\numberline {2.2.5}The Lexer class}{14}{subsection.2.2.5}
+\contentsline {section}{\numberline {2.3}Possible enhancements}{15}{section.2.3}
+\contentsline {chapter}{\numberline {3}Parsing (Syntactical analysis)}{16}{chapter.3}
+\contentsline {section}{\numberline {3.1}Describing the grammar}{16}{section.3.1}
+\contentsline {section}{\numberline {3.2}The parsing algorithm}{17}{section.3.2}
+\contentsline {section}{\numberline {3.3}The Parser module}{17}{section.3.3}
+\contentsline {chapter}{K\"osz\"onetnyilv\'an\IeC {\'\i }t\'as}{18}{chapter*.13}
+\contentsline {chapter}{Bibliography}{19}{chapter*.14}
+\contentsline {chapter}{Appendices}{20}{appendix*.15}
+\contentsline {section}{\numberline {S.1}Source code for the Lexer module}{20}{section.S.1}

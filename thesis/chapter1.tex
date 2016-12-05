@@ -1,6 +1,31 @@
 %----------------------------------------------------------------------------
-\chapter{Lexical analysis}\label{sect:Lexing}
+\chapter{Coding conventions}\label{sect:Coding}
 %----------------------------------------------------------------------------
-\section{First point}
+While JavaScript is a modern language, there are some parts of it that evolved quite slowly compared to other languages. The most prominent part is classes, which have been properly introduced into the standard with ECMAScript version 6. There are shortcomings of this implementation, although it improved on the previous version greatly. Before ECMAScript 6, a programmer who wanted to create an object in JavaScript had to use a weird syntax, since the language did not really have a class keyword, and so anonymous objects had to be used instead of classes. This allowed object oriented development, but only to a certain extent. With ECMAScript 6, a proper class keyword was introduced, alongside with keywords like extend and constructor.
 %----------------------------------------------------------------------------
-asdada
+\section{Problems with ECMAScript 6 classes}
+%----------------------------------------------------------------------------
+While they are a great improvement on the previous situation, ECMAScript 6 classes have some shortcomings - a programmer can not really define a private member for the class, since that keyword is not present in the language. Getters and setters can be used, as well as static variables, but simulating private members is not easy.
+
+\begin{lstlisting}[frame=single,float=!ht,caption="A typical class"]
+class ClassName {
+  constructor() {
+    this.member = 'x'
+    this._private = 1
+  }
+  
+  get private() {
+    return this._private
+  }
+  
+  doSomething() {
+    // do something here
+  }
+}
+\end{lstlisting}
+
+One of the ways of dealing with the absence of private members is to follow a naming convention - name everything that should be private with an underscore prefix. In fact this is the convention I followed during development, and tried to be consistent with this idea - I tried to avoid using "private" members of other class instances.
+%----------------------------------------------------------------------------
+\section{Node.js modules}
+%----------------------------------------------------------------------------
+I developed the solution using Node.js, which allowed me to easily check my solution without even starting a browser. A natural convention arose from this choice, which was to separate things into Node.js modules, which can be included into one another. This is a syntax that browsers can not deal with by themselves, but this problem can be eliminated by using the tools described in the end of the introduction.
