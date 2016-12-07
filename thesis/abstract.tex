@@ -3,7 +3,12 @@
 %----------------------------------------------------------------------------
 \chapter*{Kivonat}\addcontentsline{toc}{chapter}{Kivonat}
 
-Jelen dokumentum egy diplomaterv sablon, amely formai keretet ad a BME Villamosmérnöki és Informatikai Karán végzõ hallgatók által elkészítendõ szakdolgozatnak és diplomatervnek. A sablon használata opcionális. Ez a sablon \LaTeX~alapú, a \emph{TeXLive} \TeX-implementációval és a PDF-\LaTeX~fordítóval mûködõképes.
+A programozás megtanulása akadályokkal teli folyamat tud lenni a kezdetekben. A szakdolgozatomban erre a problémára kívánok megoldást javasolni egy JavaScipt alapú moduláris értelmez? elkészítésével, ami bármilyen programozási nyelvet képes értelmezni - amennyiben elkészül a megfelel? modul hozzá - és átfordítani JavaScript kóddá.
+
+A megoldás egy reguláris kifejezés és állapotgép alapú lexikális analizátor modulból - neve Lexer -, és egy szintaktikai elemz? modulból áll, aminek neve Parser és az LALR elemz? algoritmust implementálja, majd ennek segítségével dolgozza fel a bemenetét a BNF-ben megadott nyelvtan szerint.
+
+A szakdolgozatomban leírom a megoldás menetét és elmagyarázom a használt algoritmusok m?ködését - és hogy miért az adott algoritmus mellett döntöttem. Emellett kitérek a használt technológia sajátosságaira hogy a JavaScript mélyebb ismerete nélkül is könnyen értelmezhet? legyen a dolgozatom.
+
 \vfill
 
 %----------------------------------------------------------------------------
@@ -11,6 +16,11 @@ Jelen dokumentum egy diplomaterv sablon, amely formai keretet ad a BME Villamosm
 %----------------------------------------------------------------------------
 \chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
 
-This document is a \LaTeX-based skeleton for BSc/MSc~theses of students at the Electrical Engineering and Informatics Faculty, Budapest University of Technology and Economics. The usage of this skeleton is optional. It has been tested with the \emph{TeXLive} \TeX~implementation, and it requires the PDF-\LaTeX~compiler.
+Learning how to program can be a problematic experience for new students. In my thesis I propose a solution to the problematic first experiences by creating a modular interpreter that can interpret any kind of programming language - if a module is created for it - which has a module for it, and translate that code to JavaScript.
+
+The solution consists of a regular expressions and state machine based lexical analyser module called Lexer, and a Parser module that implements the LALR algorithm to parse grammars defined in BNF.
+
+In my thesis I describe the solution and explain the used algorithms, and the choice behind them. I also give a brief explanation of the used technologies to make the solution easy to understand even for those who do not know much about JavaScript or parsing algorithms.
+
 \vfill
 

@@ -12,7 +12,8 @@ class BasicMath extends Language {
     ])
     
     this.parser.fromBNF(
-      `<S> ::= <S> "," <E> | <E>
+      `<S> ::= <S> <SEP> <E> | ""
+      <SEP> ::= "," | "" | <Token-EOL>
       <E> ::= <E> <PM> <T> | <T>
       <T> ::= <T> <MD> <H> | <H>
       <H> ::= <H> "^" <F> | <F>
@@ -41,7 +42,7 @@ class BasicMath extends Language {
     })
     
     switch (node.rule.name) {
-      case 'E': case 'T': case 'H':
+      case 'E': case 'T':
         switch (parameters[1]) {
           case '-':
             return parameters[0] - parameters[2]
@@ -55,20 +56,22 @@ class BasicMath extends Language {
           case '/':
             return parameters[0] / parameters[2]
             break
-          case '^':
-            return Math.pow(parameters[0], parameters[2])
-            break
           default:
             throw Error('Unknown rule')
         }
         break
+      case 'H':
+        return Math.pow(parameters[0], parameters[1])
+        break
       case 'F':
-        return parameters[1]
+        return parameters[0]
         break
       case 'S':
-        return parameters[0] + ', ' + parameters[2]
+        if (parameters.length === 1)
+          return parameters[0]
+        return parameters[0] + ', ' + parameters[parameters.length - 1]
+        break
       default:
-      console.log(node.rule);
         throw Error('Unknown rule')
     }
   }

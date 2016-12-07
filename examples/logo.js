@@ -13,8 +13,8 @@ class Logo extends Language {
     ])
     
     this.parser.fromBNF(
-      `<Program> ::= <Program> <Expression> | <Expression>
-      <Expression> ::= <Command> | <For> 
+      `<Program> ::= <Program> <Expression> | ""
+      <Expression> ::= <Command> | <For>
       <Command> ::= <Command-name> <Math>
       <Command-name> ::= "f" | "b" | "l" | "r"
       <For> ::= "for" <Math> "[" <Program> "]"
@@ -49,10 +49,9 @@ class Logo extends Language {
         else 
           return child
       })
-      
-      for (let i = 0; i < parameters[1]; i++) {
-        this.executeOne(parameters[3])
-      }
+      if (parameters[1] !== undefined)
+        for (let i = 0; i < parameters[0]; i++)
+          this.executeOne(parameters[1])
     } else {
       let parameters = node.children.map(child => {
         return this.executeOne(child)
@@ -69,7 +68,7 @@ class Logo extends Language {
               throw Error('Unknown rule')
           }
           break
-        case 'Math': case 'T': case 'H':
+        case 'Math': case 'T':
           switch (parameters[1]) {
             case '-':
               return parameters[0] - parameters[2]
@@ -83,18 +82,18 @@ class Logo extends Language {
             case '/':
               return parameters[0] / parameters[2]
               break
-            case '^':
-              return Math.pow(parameters[0], parameters[2])
-              break
             default:
               throw Error('Unknown rule')
           }
+          break
+        case 'H':
+          return Math.pow(parameters[0], parameters[1])
           break
         case 'F':
           return parameters[1]
           break
         case 'S':
-          return parameters[0] + ', ' + parameters[2]
+          return parameters[0] + ', ' + parameters[1]
         default:
           return
       }

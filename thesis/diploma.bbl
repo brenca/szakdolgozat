@@ -1,5 +1,23 @@
 \begin{thebibliography}{1}
 
+\bibitem{deremer1969practical}
+Franklin~L DeRemer.
+\newblock {\em Practical translators for LR (k) languages}.
+\newblock PhD thesis, MIT Cambridge, Mass., 1969.
+
+\bibitem{frost2007modular}
+Richard~A Frost, Rahmatullah Hafiz, and Paul~C Callaghan.
+\newblock Modular and efficient top-down parsing for ambiguous left-recursive
+  grammars.
+\newblock In {\em Proceedings of the 10th International Conference on Parsing
+  Technologies}, pages 109--120. Association for Computational Linguistics,
+  2007.
+
+\bibitem{lalr1}
+Stephen Jackson.
+\newblock {\em A Tutorial Explaining LALR(1) Parsing}, 2009.
+\newblock URL: \url{http://web.cs.dal.ca/~sjackson/lalr1.html}.
+
 \bibitem{Lex}
 M.~E. Lesk and E.~Schmidt.
 \newblock {\em Lex - A Lexical Analyzer Generator}.

@@ -27,7 +27,7 @@ The lexical analyser module is named Lexer - which is in turn a JavaScript class
 The Token class represents a token - it has a value, which is the parsed string that belongs to the token, and a class, which is a reference to the TokenClass the token belongs to.
 \subsubsection{Lexer.TokenClass}
 The TokenClass represents a class of tokens - it has a name, an associated regular expression, and a state, which defaults to the DefaultState. It also has a match method that tries to match against a given string, and returns the consumed part of the string alongside with the remaining part. If the regular expression can not be successfully matched against the string, the consumed part will have a value of false, indicating no successful match.
-A special subclass is always added to the list of classes, which is the EOLTokenClass - it matches the end-of-line characters.
+Two special subclasses are always added to the list of classes, which are the EOLTokenClass - it matches the end-of-line characters - and the EOFTokenClass - which matches the end-of-file indicator.
 Another special subclass is the StatelessTokenClass, which associates the AnyState with itself, which means it will match in any non-strict state.
 \subsubsection{Lexer.TokenClassGroup}
 The TokenClassGroup is a container for TokenClasses. It can be used to define transitions if any of the classes in it matched. It has an interface that consists of a push and pop method, a mapping function to transform all elements and a find function that checks if a TokenClass is part of the group or not.

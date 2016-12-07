@@ -4,19 +4,50 @@
     <meta charset="utf-8">
     <title>Teszt</title>
     <script type="text/javascript">
-      var body = ''
-      window.console.log = function(message) {
-        if (document.querySelector('body'))
-          document.querySelector('body').innerHTML = message
-        else 
-          body = message
-      }
       window.addEventListener('load', function() {
-        console.log(body)
+        var c = document.getElementById("canvas")
+        var ctx = c.getContext("2d")
+        var pos = {
+          x: 250,
+          y: 250,
+          angle: 0
+        }
+        
+        let l = new Logo(p => {
+          switch (p[0]) {
+            case 'f':
+              ctx.beginPath()
+              ctx.moveTo(pos.x, pos.y)
+              pos.x += p[1] * Math.cos(pos.angle / 360 * 2 * Math.PI)
+              pos.y += p[1] * Math.sin(pos.angle / 360 * 2 * Math.PI)
+              ctx.lineTo(pos.x, pos.y)
+              ctx.stroke()
+              break
+            case 'b':
+              ctx.beginPath()
+              ctx.moveTo(pos.x, pos.y)
+              pos.x += - p[1] * Math.cos(pos.angle / 360 * 2 * Math.PI)
+              pos.y += - p[1] * Math.sin(pos.angle / 360 * 2 * Math.PI)
+              ctx.lineTo(pos.x, pos.y)
+              ctx.stroke()
+              break
+            case 'l':
+              pos.angle -= p[1]
+              break
+            case 'r':
+              pos.angle += p[1]
+              break
+            default:
+              
+          }
+        })
+        
+        l.execute(`for 360 [f 2 r 1] for 10^2+50 [f 321 r 121 for 2 [r 1 l 1]]`)
       })
     </script>
     <script src="./bundle.js"></script>
   </head>
   <body>
+    <canvas id="canvas" width="500" height="500" style="border:1px solid #d3d3d3;">
   </body>
 </html>
