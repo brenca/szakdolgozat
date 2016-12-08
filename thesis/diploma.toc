@@ -2,55 +2,58 @@
 \contentsline {chapter}{Kivonat}{4}{chapter*.2}
 \contentsline {chapter}{Abstract}{5}{chapter*.3}
 \contentsline {chapter}{Introduction}{6}{chapter*.4}
-\contentsline {chapter}{\numberline {1}Coding conventions}{9}{chapter.1}
-\contentsline {section}{\numberline {1.1}Problems with ECMAScript 6 classes}{9}{section.1.1}
-\contentsline {section}{\numberline {1.2}Node.js modules}{10}{section.1.2}
-\contentsline {chapter}{\numberline {2}Lexical analysis}{11}{chapter.2}
-\contentsline {section}{\numberline {2.1}Using regular expressions}{11}{section.2.1}
-\contentsline {section}{\numberline {2.2}The Lexer module}{12}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Lexer subclasses}{12}{subsection.2.2.1}
-\contentsline {subsubsection}{Lexer.Token}{12}{section*.6}
-\contentsline {subsubsection}{Lexer.TokenClass}{12}{section*.7}
-\contentsline {subsubsection}{Lexer.TokenClassGroup}{13}{section*.8}
-\contentsline {subsubsection}{Lexer.State}{13}{section*.9}
-\contentsline {subsubsection}{Lexer.StateTransitionBase}{13}{section*.10}
-\contentsline {subsubsection}{Lexer.StateTransition}{13}{section*.11}
-\contentsline {subsubsection}{Lexer.GroupStateTransition}{14}{section*.12}
-\contentsline {subsection}{\numberline {2.2.2}Stateless mode}{14}{subsection.2.2.2}
-\contentsline {subsection}{\numberline {2.2.3}Stateful mode}{14}{subsection.2.2.3}
-\contentsline {subsection}{\numberline {2.2.4}Skipping whitespaces}{14}{subsection.2.2.4}
-\contentsline {subsection}{\numberline {2.2.5}The Lexer class}{14}{subsection.2.2.5}
-\contentsline {section}{\numberline {2.3}Possible enhancements}{15}{section.2.3}
-\contentsline {chapter}{\numberline {3}Parsing (Syntactical analysis)}{16}{chapter.3}
-\contentsline {section}{\numberline {3.1}Describing the grammar}{16}{section.3.1}
-\contentsline {section}{\numberline {3.2}The parsing algorithm}{17}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Naive implementation}{18}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}LALR - LookAheadLR}{18}{subsection.3.2.2}
-\contentsline {subsubsection}{Adding a START rule to the grammar}{19}{section*.13}
-\contentsline {subsubsection}{Finding the item sets}{19}{section*.14}
-\contentsline {subsubsection}{Finding the translation table elements}{20}{section*.15}
-\contentsline {subsubsection}{Finding the extended grammar rules}{20}{section*.16}
-\contentsline {subsubsection}{Finding the First and Follow sets}{20}{section*.17}
-\contentsline {subsubsection}{Merging the rules of the extended grammar}{21}{section*.18}
-\contentsline {subsubsection}{Creating the Action/Goto table}{21}{section*.19}
-\contentsline {section}{\numberline {3.3}The Parser module}{22}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}The Parser subclasses}{22}{subsection.3.3.1}
-\contentsline {subsubsection}{Parser.RuleTerminalBase}{22}{section*.20}
-\contentsline {subsubsection}{Parser.BNFRule}{22}{section*.21}
-\contentsline {subsubsection}{Parser.BNFTerminal}{23}{section*.22}
-\contentsline {subsubsection}{Parser.LR0Item}{23}{section*.23}
-\contentsline {subsubsection}{Parser.LR0ItemSet}{23}{section*.24}
-\contentsline {subsubsection}{Parser.ExtendedGrammarItem}{23}{section*.25}
-\contentsline {subsubsection}{Parser.ExtendedGrammarRule}{23}{section*.26}
-\contentsline {subsubsection}{Parser.Action}{23}{section*.27}
-\contentsline {subsubsection}{Parser.Accept, Parser.Shift, Parser.Reduce, Parser.Goto}{23}{section*.28}
-\contentsline {subsubsection}{Parser.Node}{24}{section*.29}
-\contentsline {subsection}{\numberline {3.3.2}The Parser class}{24}{subsection.3.3.2}
-\contentsline {section}{\numberline {3.4}Possible enhancements}{24}{section.3.4}
-\contentsline {chapter}{\numberline {4}The Language module and two examples}{25}{chapter.4}
-\contentsline {section}{\numberline {4.1}The Language module}{25}{section.4.1}
-\contentsline {section}{\numberline {4.2}Examples}{25}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}The math parser}{25}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}The Logo subset parser}{27}{subsection.4.2.2}
-\contentsline {chapter}{Acknowledgement}{29}{chapter*.30}
-\contentsline {chapter}{Bibliography}{30}{chapter*.31}
+\contentsline {chapter}{\numberline {1}Coding conventions}{10}{chapter.1}
+\contentsline {section}{\numberline {1.1}About JavaScript}{10}{section.1.1}
+\contentsline {section}{\numberline {1.2}Problems with ECMAScript 6 classes}{11}{section.1.2}
+\contentsline {section}{\numberline {1.3}Node.js modules}{11}{section.1.3}
+\contentsline {chapter}{\numberline {2}Lexical analysis}{13}{chapter.2}
+\contentsline {section}{\numberline {2.1}Using regular expressions}{13}{section.2.1}
+\contentsline {section}{\numberline {2.2}The Lexer module}{14}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Lexer subclasses}{15}{subsection.2.2.1}
+\contentsline {subsubsection}{Lexer.Token}{15}{section*.6}
+\contentsline {subsubsection}{Lexer.TokenClass}{15}{section*.7}
+\contentsline {subsubsection}{Lexer.TokenClassGroup}{15}{section*.8}
+\contentsline {subsubsection}{Lexer.State}{15}{section*.9}
+\contentsline {subsubsection}{Lexer.StateTransitionBase}{15}{section*.10}
+\contentsline {subsubsection}{Lexer.StateTransition}{16}{section*.11}
+\contentsline {subsubsection}{Lexer.GroupStateTransition}{16}{section*.12}
+\contentsline {subsection}{\numberline {2.2.2}Stateless mode}{16}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Stateful mode}{16}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Skipping whitespaces}{16}{subsection.2.2.4}
+\contentsline {subsection}{\numberline {2.2.5}The Lexer class}{16}{subsection.2.2.5}
+\contentsline {section}{\numberline {2.3}Possible enhancements}{17}{section.2.3}
+\contentsline {chapter}{\numberline {3}Syntactical analysis (Parsing)}{18}{chapter.3}
+\contentsline {section}{\numberline {3.1}Describing the grammar}{18}{section.3.1}
+\contentsline {section}{\numberline {3.2}The parsing algorithm}{19}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Naive implementation}{20}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}LALR - LookAheadLR}{21}{subsection.3.2.2}
+\contentsline {subsubsection}{Adding a START rule to the grammar}{21}{section*.13}
+\contentsline {subsubsection}{Finding the item sets}{21}{section*.14}
+\contentsline {subsubsection}{Finding the translation table elements}{22}{section*.15}
+\contentsline {subsubsection}{Finding the extended grammar rules}{22}{section*.16}
+\contentsline {subsubsection}{Finding the First and Follow sets}{23}{section*.17}
+\contentsline {subsubsection}{Merging the rules of the extended grammar}{23}{section*.18}
+\contentsline {subsubsection}{Creating the Action/Goto table}{24}{section*.19}
+\contentsline {section}{\numberline {3.3}The Parser module}{24}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}The Parser subclasses}{25}{subsection.3.3.1}
+\contentsline {subsubsection}{Parser.RuleTerminalBase}{25}{section*.20}
+\contentsline {subsubsection}{Parser.BNFRule}{25}{section*.21}
+\contentsline {subsubsection}{Parser.BNFTerminal}{25}{section*.22}
+\contentsline {subsubsection}{Parser.LR0Item}{25}{section*.23}
+\contentsline {subsubsection}{Parser.LR0ItemSet}{25}{section*.24}
+\contentsline {subsubsection}{Parser.ExtendedGrammarItem}{25}{section*.25}
+\contentsline {subsubsection}{Parser.ExtendedGrammarRule}{25}{section*.26}
+\contentsline {subsubsection}{Parser.Action}{26}{section*.27}
+\contentsline {subsubsection}{Parser.Accept, Parser.Shift, Parser.Reduce, Parser.Goto}{26}{section*.28}
+\contentsline {subsubsection}{Parser.Node}{26}{section*.29}
+\contentsline {subsection}{\numberline {3.3.2}The Parser class}{26}{subsection.3.3.2}
+\contentsline {section}{\numberline {3.4}Possible enhancements}{26}{section.3.4}
+\contentsline {chapter}{\numberline {4}The Language module and two examples}{27}{chapter.4}
+\contentsline {section}{\numberline {4.1}The Language module}{27}{section.4.1}
+\contentsline {section}{\numberline {4.2}Examples}{27}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}The math parser}{27}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}The Logo subset parser}{29}{subsection.4.2.2}
+\contentsline {chapter}{\numberline {5}Summary, conclusions}{31}{chapter.5}
+\contentsline {chapter}{\numberline {6}Problems, possible improvements}{33}{chapter.6}
+\contentsline {chapter}{Acknowledgement}{34}{chapter*.31}
+\contentsline {chapter}{Bibliography}{35}{chapter*.32}

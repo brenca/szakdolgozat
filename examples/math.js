@@ -6,14 +6,14 @@ class BasicMath extends Language {
     super()
     
     this.lexer.addTokenClasses([
-      new Lexer.TokenClass('int', /[0-9]+(?![0-9]*\.)/),
+      new Lexer.TokenClass('int', /[0-9]+(?![0-9]*\.[0-9]+)/),
       new Lexer.TokenClass('float', /[0-9]+\.[0-9]+/),
       new Lexer.TokenClass('char', /\S/)
     ])
     
     this.parser.fromBNF(
       `<S> ::= <S> <SEP> <E> | ""
-      <SEP> ::= "," | "" | <Token-EOL>
+      <SEP> ::= "," | "" | <Token-EOL> | "."
       <E> ::= <E> <PM> <T> | <T>
       <T> ::= <T> <MD> <H> | <H>
       <H> ::= <H> "^" <F> | <F>

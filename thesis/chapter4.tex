@@ -2,12 +2,12 @@
 \chapter{The Language module and two examples}
 %----------------------------------------------------------------------------
 \section{The Language module}
-The Language module consists of only one class - the Language class - which encapsulates the Lexer and Parser classes. It has two getters - one for the Lexer and one for the Parser, and a method to build and return the AST from the raw source code string.
+The Language module consists of only one class --- the Language class --- which encapsulates the Lexer and Parser classes. It has two getters --- one for the Lexer and one for the Parser --- and a method to build and return the AST from the raw source code string.
 The module exports the Language class, which has the Lexer and Parser classes as subclasses too.
 \section{Examples}
-I have written two example language modules to test the modules - one is a math expression parser, and the other is a very small subset of the Logo programming language - a for cycle, and the drawing statements are accepted, and of course the parameters can be math expressions.
+I have written two example language modules to test the core modules --- one is a math expression parser, and the other is a very small subset of the Logo programming language --- a for cycle, and the drawing statements are accepted, and of course the parameters can be math expressions.
 \subsection{The math parser}
-The way I imagined people could create language modules is by extending the Language class - and this is what I have done in this case. In the constructor I initialize the Lexer token classes, and the parser with the BNF grammar. I added two more methods - an executeOne and an execute method. The execute method builds the AST using the parser's parse method, and calls executeOne on the main node. The executeOne method then recursively executes the subtrees of the nodes - it checks for known types based on the names of the token classes, and parses the integers and floats into their numerical values. If the current node is not a terminal, then it first calls itself on that node to determine it's value. Once all the numerical parameters are ready, it does the calculation, and returns the resulting number. This is done using switch statements to handle each rule in it's own way.
+The way I imagined people could create language modules is by extending the Language class --- and this is what I have done in this case. In the constructor I initialize the Lexer token classes, and the parser with the BNF grammar. I added two more methods --- an executeOne and an execute method. The execute method builds the AST using the parser's parse method, and calls executeOne on the main node. The executeOne method then recursively executes the subtrees of the nodes --- it checks for known types based on the names of the token classes, and parses the integers and floats into their numerical values. If the current node is not a terminal, then it first calls itself on that node to determine it's value. Once all the numerical parameters are ready, it does the calculation, and returns the resulting number. This is done using switch statements to handle each rule differently if necessary.
 
 \begin{lstlisting}[frame=single]
 const Language = require('../lib/language')
@@ -18,7 +18,7 @@ class BasicMath extends Language {
     super()
     
     this.lexer.addTokenClasses([
-      new Lexer.TokenClass('int', /[0-9]+(?![0-9]*\.)/),
+      new Lexer.TokenClass('int', /[0-9]+(?![0-9]*\.[0-9]+)/),
       new Lexer.TokenClass('float', /[0-9]+\.[0-9]+/),
       new Lexer.TokenClass('char', /\S/)
     ])
@@ -99,6 +99,7 @@ module.exports = new BasicMath()
 
 I have added some extra rules to verify that the parser can handle optional rules (rules with $\epsilon$ as an alternative) and left-recursion. By carefully constructing the grammar I have ensured that the operator precedence is as it should be ($nth power > */ > +-$).
 
+
 \begin{lstlisting}[frame=single]
 const BasicMath = require('./examples/math')
 global.BasicMath = BasicMath
@@ -111,9 +112,13 @@ console.log(
 Running this piece of code results in the following: \lit{1000, 10, 2.2, 43.2432}, which is indeed the expected output.
 
 \subsection{The Logo subset parser}
-The way the Logo subset parser is constructed is similar to the math expression parser. 
+The way the Logo subset parser is constructed is similar to the math expression parser. I uses math expressions as the parameters for the drawing expressions, and it has a for cycle that runs the code given to it in a list \lit{n} times.
 
+\newpage
 It uses the following grammar:
+
+\begin{tabular}{l l}
+\begin{minipage}{0.5\textwidth}
 \begin{grammar}
 
 <Program> ::= <Program> <Expression> \alt \lit{}
@@ -139,11 +144,15 @@ It uses the following grammar:
 <F> ::= \lit{(} <Math> \lit{)} \alt <Token-int> \alt <Token-float>
 
 \end{grammar}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\vspace{-2ex}
+\includegraphics[width=60mm,keepaspectratio]{figures/logo.png}
+\captionof{figure}{Result of the Logo example}
+\end{minipage}
+\end{tabular}
 
-\begin{lstlisting}[frame=single]
-const Logo = require('./examples/logo')
-global.Logo = Logo
-\end{lstlisting}
+The resulting module is then similarly exported into a global variable, which means that in the browser, it will be available as a property of the window object, while in Node.js it will become a global variable.
 
 By providing a callback parameter, and implementing simple drawing on a HTML5 canvas in JavaScript, if we bundle the interpreter script and handle the necessary things in the browser, we can actually create drawings fairly easily.
 
@@ -151,8 +160,4 @@ By providing a callback parameter, and implementing simple drawing on a HTML5 ca
 logo.execute(`for 360 [f 2 r 1] for 10^2+50 [f 321 r 121 for 2 [r 1 l 1]]`)
 \end{lstlisting}
 
-This code generates the following image:
-
-\begin{center}
-\includegraphics[width=60mm,keepaspectratio]{figures/logo.png}
-\end{center}
+This code generates the drawing on Figure 4.1

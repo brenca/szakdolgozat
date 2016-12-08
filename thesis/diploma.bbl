@@ -1,4 +1,16 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{backus1963revised}
+John~W Backus, FL~Bauer, J~Green, C~Katz, J~McCarthy, P~Naur, AJ~Perlis,
+  H~Rutishauser, K~Samelson, B~Vauquois, et~al.
+\newblock Revised report on the algorithmic language algol 60.
+\newblock {\em The Computer Journal}, 5(4):349--367, 1963.
+
+\bibitem{deremer1982efficient}
+Frank DeRemer and Thomas Pennello.
+\newblock Efficient computation of lalr (1) look-ahead sets.
+\newblock {\em ACM Transactions on Programming Languages and Systems (TOPLAS)},
+  4(4):615--649, 1982.
 
 \bibitem{deremer1969practical}
 Franklin~L DeRemer.
@@ -18,10 +30,36 @@ Stephen Jackson.
 \newblock {\em A Tutorial Explaining LALR(1) Parsing}, 2009.
 \newblock URL: \url{http://web.cs.dal.ca/~sjackson/lalr1.html}.
 
+\bibitem{joy2000java}
+Bill Joy, Guy Steele, James Gosling, and Gilad Bracha.
+\newblock Java (tm) language specification.
+\newblock {\em Addisson-Wesley, June}, 2000.
+
+\bibitem{kleene1951representation}
+Stephen~Cole Kleene.
+\newblock Representation of events in nerve nets and finite automata.
+\newblock Technical report, DTIC Document, 1951.
+
 \bibitem{Lex}
 M.~E. Lesk and E.~Schmidt.
 \newblock {\em Lex - A Lexical Analyzer Generator}.
 \newblock Bell Laboratories, July 1975.
 \newblock URL: \url{http://hpdc.syr.edu/~chapin/cis657/lex.pdf}.
+
+\bibitem{redziejowski2007parsing}
+Roman~R Redziejowski.
+\newblock Parsing expression grammar as a primitive recursive-descent parser
+  with backtracking.
+\newblock {\em Fundamenta Informaticae}, 79(3-4):513--524, 2007.
+
+\bibitem{sippu2013parsing}
+Seppo Sippu and Eljas Soisalon-Soininen.
+\newblock {\em Parsing Theory: Volume II LR (k) and LL (k) Parsing}, volume~20.
+\newblock Springer Science \& Business Media, 2013.
+
+\bibitem{willink2001meta}
+Edward~D Willink.
+\newblock Meta-compilation for c++.
+\newblock 2001.
 
 \end{thebibliography}

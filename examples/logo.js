@@ -7,7 +7,7 @@ class Logo extends Language {
     this._handler = handler
     
     this.lexer.addTokenClasses([
-      new Lexer.TokenClass('int', /[0-9]+(?![0-9]*\.)/),
+      new Lexer.TokenClass('int', /[0-9]+(?![0-9]*\.[0-9]+)/),
       new Lexer.TokenClass('float', /[0-9]+\.[0-9]+/),
       new Lexer.TokenClass('char', /\S/)
     ])
