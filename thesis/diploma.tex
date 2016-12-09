@@ -22,6 +22,7 @@
 \usepackage{wrapfig}
 \usepackage{hyperref}
 \usepackage{syntax}
+\usepackage{pdfpages}
 
 %--------------------------------------------------------------------------------------
 % Main variables
@@ -30,7 +31,7 @@
 \newcommand{\vikkonzulens}{Kundra László János}
 \newcommand{\vikcim}{Modular Interpreter Written in JavaScript}
 \newcommand{\viktanszek}{Department of Automation and Applied Informatics}
-\newcommand{\vikdoktipus}{Thesis}
+\newcommand{\vikdoktipus}{Degree thesis}
 \newcommand{\vikdepartmentr}{Heilig Benedek}
 
 %--------------------------------------------------------------------------------------
@@ -73,7 +74,6 @@
     filecolor=black,           % color of file links
     urlcolor=black             % color of external links
 }
-
 %--------------------------------------------------------------------------------------
 % Set up listings
 %--------------------------------------------------------------------------------------
@@ -145,6 +145,7 @@ aboveskip=10pt}
 \pagenumbering{gobble}
 \onehalfspacing
 %\include{guideline}
+\includepdf[pages={1}]{figures/feladat.pdf}
 \include{project}
 
 \pagenumbering{arabic}

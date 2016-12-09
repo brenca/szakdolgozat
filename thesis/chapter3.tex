@@ -7,7 +7,7 @@ The input of the parser is the grammar and the tokens, while the output is a hie
 %----------------------------------------------------------------------------
 \section{Describing the grammar}
 %----------------------------------------------------------------------------
-There are well established ways to describe grammars --- one of them is a notation called Backus?Naur form, or BNF (named after John Backus --- who proposed the notation --- and Peter Naur --- who edited the first document that used it, a 1963 report on Algol60 \cite{backus1963revised}). This notation is widely used, and provides an easy way to describe context-free grammars. Context-free grammars are a subset of formal grammars which do not use context to determine which rule to be used in a given situation.
+There are well established ways to describe grammars --- one of which is a notation called Backus?Naur form, or BNF (named after John Backus --- who proposed the notation --- and Peter Naur --- who edited the first document that used it, a 1963 report on Algol60 \cite{backus1963revised}). This notation is widely used, and provides an easy way to describe context-free grammars. Context-free grammars are a subset of formal grammars which do not use context to determine which rule to be used in a given situation.
 
 A grammar consists of basic production rules which match one non-terminal to zero or several terminals and non-terminals, for example:
 \begin{grammar}
@@ -28,7 +28,7 @@ BNF has been extended over it's existence, the two notable extensions is EBNF an
 %----------------------------------------------------------------------------
 \section{The parsing algorithm}
 %----------------------------------------------------------------------------
-One of the big choices someone who sets out to write a parser shall make is which parsing algorithm to use. The algorithms can be divided into two groups, namely top-down parsing algorithms and bottom up parsing algorithms. These differ in the following ways:
+One of the big choices someone who sets out to write a parser must make is which parsing algorithm to use. The algorithms can be divided into two groups, namely top-down parsing algorithms and bottom up parsing algorithms. These differ in the following ways:
 \begin{itemize}
 \item Top-down parsers try to fit a parsing tree to the input string by looking at the tokens left to right, and looking for any matching grammar rules. This means that the parse tree is built from the higher level structures, and the most basic rules get parsed the last --- hence the name top-down parsing. Since two rules can have similar prefixes, in ambiguous cases all the possible choices are explored. The list of top-down parsing algorithms include:
 \begin{itemize}
@@ -46,25 +46,25 @@ During development I have tried two of these algorithms. One was a naive impleme
 My first idea to parse a source string was to build a parser following an intuitive, greedy algorithm. The basic idea was to read the grammar rules, and try to match the beginning of the string with one of the rules by recursively matching the right hand side of each rule. Surprisingly this approach worked quite well in some cases, but had some major flaws which led me to abandon this idea and look for an algorithm that was proven to be effective. The problems were the following:
 \begin{itemize}
 \item The parser was greedy, it accepted the rule that consumed the most of the input string, so rules that had the same prefix were not handled well by the algorithm.
-\item Left-recursive rules caused an infinitely deep recursion, since the parser always tried to match the same rule over and over again. This is something that is a common problem in the family of top-down parser, although an algorithm was constructed \cite{frost2007modular} that is top-down and can handle left-recursive grammars.
+\item Left-recursive rules caused an infinitely deep recursion, since the parser always tried to match the same rule over and over again. This is something that is a common problem in the family of top-down parsers, however an algorithm was constructed \cite{frost2007modular} that is top-down and can handle left-recursive grammars.
 \end{itemize}
 After realizing that the naive algorithm has severe limitations, I looked for a better alternative --- one that was not too difficult to implement, but was also efficient. My first idea was to use an LL parser, but once I realized that this would not solve the left-recursion problem, I turned to the slightly more complicated LR parsers. After a bit of research, I have found a very easy-to-follow description of an LALR parser construction algorithm, and so I have based my work on this algorithm.
 \subsection{LALR - LookAheadLR}
-The invention of LALR algorithm is attributed to Frank DeRemer \cite{deremer1969practical}, but he did not actually create an algorithm to construct these kinds of parsers. Since then multiple algorithms have been created to construct LALR parsers. The algorithm I have used - and which is described by Stephen Jackson in his "A Tutorial Explaining LALR(1) Parsing" \cite{lalr1} is an algorithm that first builds a full LR(\textit{1}) table, which is then reduced to an LALR table. This is not the most efficient way to construct an LALR parser, since merging of some rules only happens during a late stage, while merging could be done in one of the earlier stages too \footnote{LALR parsing --- Stanford University handout \url{http://dragonbook.stanford.edu/lecture-notes/Stanford-CS143/11-LALR-Parsing.pdf}}, with the downside of the merging being slightly more complicated to do. I have decided to closely follow the tutorial, since memory during table construction should not be a huge problem (nowadays there is plenty enough memory in the use-case scenarios of this parser generator, we are not aiming to create a parser for an embedded system with limited memory), but some steps of the algorithm ---  namely the calculation of First and Follow sets --- required additional research to be implemented effectively.
+The invention of LALR algorithm is attributed to Frank DeRemer \cite{deremer1969practical}, but he did not actually create an algorithm to construct these kinds of parsers. Since then multiple algorithms have been created to construct LALR parsers. The algorithm I have used - and which is described by Stephen Jackson in his "A Tutorial Explaining LALR(1) Parsing" \cite{lalr1} is an algorithm that first builds a full LR(\textit{1}) table, which is then reduced to an LALR table. This is not the most efficient way to construct an LALR parser, since merging of some rules only happens during a later stage, while merging could be done in one of the earlier stages too \footnote{LALR parsing --- Stanford University handout \url{http://dragonbook.stanford.edu/lecture-notes/Stanford-CS143/11-LALR-Parsing.pdf}}, with the downside of the merging being slightly more complicated to do. I have decided to closely follow the tutorial, since memory during table construction should not be a huge problem (nowadays there is plenty enough memory in the use-case scenarios of this parser generator, we are not aiming to create a parser for an embedded system with limited memory), but some steps of the algorithm ---  namely the calculation of First and Follow sets --- required additional research to be implemented effectively.
 The construction of an LALR parser by reducing an LR(\textit{1}) is done in the following steps:
 \subsubsection{Adding a START rule to the grammar}
-This is more of a preparation step for the real algorithm - we need to have a specific starting rule for our grammar, which must only have one item on the right hand side. We could let the writer of the grammar deal with this convention, but it is easier to just create a starting rule for ourselves that has the first rule of the grammar on the right hand side. In my case, this rule gets the special name "\#S" which is otherwise not a valid name, so this rule can not be changed later during the grammar definition by adding alternatives. This rule will be the new first rule of the grammar. 
+This is more of a preparation step for the real algorithm - we need to have a specific starting rule for our grammar, which must only have one item on the right hand side. We could let the writer of the grammar deal with this convention, but it is easier to just create a starting rule for ourselves that has the first rule of the grammar on the right hand side. In my case, this rule gets the special name \lit{\#S} which is otherwise not a valid name, so this rule can not be changed later during the grammar definition by adding alternatives. This rule will be the new first rule of the grammar. 
 \subsubsection{Finding the item sets} 
-The first step is finding the item sets --- or to be more precise the canonical collection of LR(\textit{0}) items. These items represent partially parsed rules, with a \textbullet after the last parsed item on the right hand side (or in the case of a rule that has no parsed elements, at the beginning). The following item represents a \textit{Sum} rule that expects a \lit{+} as the next parsed token:
+The first step is finding the item sets --- or to be more precise the canonical collection of LR(\textit{0}) items. These items represent partially parsed rules, with a \textbullet ~ after the last parsed item on the right hand side (or in the case of a rule that has no parsed elements, at the beginning). The following item represents a \textit{Sum} rule that expects a \lit{+} as the next parsed token:
 \begin{grammar}
-<Sum> ::= <Sum> \textbullet \lit{+} <One>
+<Sum> ::= <Sum> \textbullet ~ \lit{+} <One>
 \end{grammar}
 
 The item sets are constructed using the following algorithm:
 \begin{enumerate}
-\item The first set starts with the starting rule, with the \textbullet at the beginning of the right hand side.
-\item We expand the set by adding every rule (with the \textbullet at the beginning) that maps from anything on the right hand side of the rules in the set. We do this until the set does not change any more.
-\item We calculate what inputs the set is expecting (what items are after the \textbullet in each rule) and we begin a new set using each of these inputs. We begin a new set by adding each item from the current set that expects the input we chose, but with the \textbullet moved one position forward (after the input, meaning that we have moved on to the next input).
+\item The first set starts with the starting rule, with the \textbullet ~ at the beginning of the right hand side.
+\item We expand the set by adding every rule (with the \textbullet ~ at the beginning) that maps from anything on the right hand side of the rules in the set. We do this until the set does not change any more.
+\item We calculate what inputs the set is expecting (what items are after the \textbullet ~ in each rule) and we begin a new set using each of these inputs. We begin a new set by adding each item from the current set that expects the input we chose, but with the \textbullet ~ moved one position forward (after the input, meaning that we have moved onto the next input).
 \item We expand each of the newly created sets by repeating step 2 on them, until we eventually expand all sets with all possible inputs.
 \end{enumerate}
 \subsubsection{Finding the translation table elements} 
@@ -75,7 +75,7 @@ The extended grammar consists of extended grammar rules - which are basically th
 \item The left hand side's \textit{from set} is the item set the rule belongs to, while the \textit{to set} is read from the translation table of the set --- specifically the set that we would transition to if the left hand side was given as input. In the case of the starting rule, this set does not exist, but this special case is avoided because the starting rule can not appear on the right hand side of any rule, since that is a special rule that we ourselves added.
 \item The right hand side is calculated iteratively. The first \textit{from} and \textit{to set} of the first item is set similarly to the left hand side, while for the following items the \textit{from set} will be the \textit{to set} of the previous item --- basically forming a chain of transitions. This will allow us later to determine which is the final set that the rule transitions to.
 \end{enumerate}
-If we take every item from every item set with the \textbullet at the beginning of the right hand side, and apply this procedure to those items, we get the full extended grammar.
+If we take every item from every item set with the \textbullet ~ at the beginning of the right hand side, and apply this procedure to those items, we get the full extended grammar.
 \subsubsection{Finding the First and Follow sets} 
 The first sets are calculated for the extended grammar items with the following algorithm:
 \begin{enumerate}
@@ -103,19 +103,19 @@ The Follow sets can be calculated iteratively the same way we calculated the Fir
 \subsubsection{Merging the rules of the extended grammar} 
 We now can merge the extended grammar rules. This is the step that reduces the size of the Action/Goto table, and thus the required memory for the parser.
 
-We can merge two rules if their original rule is the same (that is, they are created from the same original grammar rule, so stripping away the state transition informations would leave us with identical rules) and their final sets are also the same. When we merge two rules, the merged rule's Follow set will be the union of the Follow sets of the merged rules. 
+We can merge two rules if their original rule is the same (that is to say they are created from the same original grammar rule, so stripping away the state transition informations would leave us with identical rules) and their final sets are also the same. When we merge two rules, the merged rule's Follow set will be the union of the Follow sets of the merged rules. 
 \subsubsection{Creating the Action/Goto table} 
-Now the core of the parser, the Action/Goto table can be constructed. Using this table, we can then parse any input by applying simple rules --- the Actions. We do this by keeping track of the following: a stack of states, the input, and an array of parse tree nodes which is the output of the parser.
+Now the core of the parser, the Action/Goto table can be constructed. Using this table, we can then parse any input by applying simple rules --- the Actions. We do this by keeping track of the following: a stack of states, the input, and the output of the parser which is an array of parse tree nodes.
 
 The Goto part of the table can be read from the translation table directly --- every non-terminal transition is copied as a Goto. The Action part of the table can contain 4 types of actions:
 \begin{itemize}
-\item Accept -- this mean that the input has been parsed, and the algorithm is finished
-\item Error -- this represents a syntax error --- a token was given as input that was not expected. This action is the default if none specified directly
+\item Accept -- this means that the input has been parsed, and the algorithm is finished
+\item Error -- this represents a syntax error --- a token was given as input that was not expected. This action is the default if none was specified directly
 \item Shift -- pushes the state associated with it to the parser stack and removes the first token from the input
-\item Reduce -- Removes as many items from the state stack as many items the right hand side of the associated rule contains. The same amount of nodes are removed from the nodes list, and a new node is added with the removed nodes as children, and the action's rule as the rule for the node. The next state is deduced from the Goto table --- we use the state on top of the stack as a temporary state, we use the left hand side of the rule as an input to the Goto table, and we push the item in the Goto table to the stack.
+\item Reduce -- Removes as many items from the state stack as the right hand side of the associated rule contains. The same amount of nodes are removed from the nodes list, and a new node is added with the removed nodes as children, and the action's rule as the rule for the node. The next state is deduced from the Goto table --- we use the state on top of the stack as a temporary state, we use the left hand side of the rule as an input to the Goto table, and we push the item in the Goto table to the stack.
 \end{itemize}
 
-We start out in state 0, which contains the starting rule. Then we can start parsing by examining the beginning of the input and reading the action we need to perform from the table. Doing this until we hit an Accept or Error action will result in either a syntax error, or a valid parse tree. This tree then can be transformed into an abstract syntax tree by removing unnecessary data --- we merge nodes that only have one children with their child, we remove children which have terminal values originally --- these contain no information ---, and we remove empty strings from the children after reducing them too.
+We start out in state 0, which contains the starting rule. Then we can start parsing by examining the beginning of the input and reading the action we need to perform from the table. Doing this until we hit an Accept or Error action will result in either a syntax error, or a valid parse tree. This tree then can be transformed into an abstract syntax tree by removing unnecessary data --- we merge nodes that only have one child with their child, we remove children which have terminal values originally --- these contain no information ---, and we remove empty strings from the children after reducing them too.
 %----------------------------------------------------------------------------
 \section{The Parser module}
 %----------------------------------------------------------------------------
@@ -128,9 +128,9 @@ Represents a rule read from the BNF definition. Has a name, and a list of subrul
 \subsubsection{Parser.BNFTerminal}
 This class represents a terminal value read from the BNF definition.
 \subsubsection{Parser.LR0Item}
-This class represents an item of the canonical collection of LR(\textit{0}) items. It has a rule, an index to indicate which subrule alternative to use, and a dot value to indicate which item the \textbullet is before.
+This class represents an item of the canonical collection of LR(\textit{0}) items. It has a rule, an index to indicate which subrule alternative to use, and a dot value to indicate which item the \textbullet ~ is before.
 \subsubsection{Parser.LR0ItemSet}
-It represents a set of LR0Items. It stores the items and the translation table, and has methods used during calculation of the item sets (getting a list of items after the \textbullet symbol, creating new items for a new set, expanding the set).
+It represents a set of LR0Items. It stores the items and the translation table, and has methods used during calculation of the item sets (getting a list of items after the \textbullet ~ symbol, creating new items for a new set, expanding the set).
 \subsubsection{Parser.ExtendedGrammarItem}
 It represents a terminal or non-terminal of the original grammar, but with the additional information about \textit{from} and \textit{to set}s, and also the First and Follow sets. A set of these items is maintained during parser generation.
 \subsubsection{Parser.ExtendedGrammarRule}

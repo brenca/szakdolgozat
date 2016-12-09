@@ -42,7 +42,7 @@
 \contentsline {subsubsection}{Parser.LR0Item}{25}{section*.23}
 \contentsline {subsubsection}{Parser.LR0ItemSet}{25}{section*.24}
 \contentsline {subsubsection}{Parser.ExtendedGrammarItem}{25}{section*.25}
-\contentsline {subsubsection}{Parser.ExtendedGrammarRule}{25}{section*.26}
+\contentsline {subsubsection}{Parser.ExtendedGrammarRule}{26}{section*.26}
 \contentsline {subsubsection}{Parser.Action}{26}{section*.27}
 \contentsline {subsubsection}{Parser.Accept, Parser.Shift, Parser.Reduce, Parser.Goto}{26}{section*.28}
 \contentsline {subsubsection}{Parser.Node}{26}{section*.29}
